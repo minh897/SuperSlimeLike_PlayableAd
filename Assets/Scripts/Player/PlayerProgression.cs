@@ -15,15 +15,11 @@ public class PlayerProgression : MonoBehaviour
     {
         if (other.TryGetComponent<Consumable>(out var food))
         {
-            TryToEat(food);
+            if (food.CanEat(level))
+            {
+                food.GetConsume();
+            }
         }
     }
 
-    void TryToEat(Consumable food)
-    {
-        if (food.CanEat(level))
-        {
-            food.GetConsume();
-        }
-    }
 }
