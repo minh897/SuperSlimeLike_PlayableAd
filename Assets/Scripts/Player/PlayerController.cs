@@ -34,7 +34,7 @@ public class PlayerController : MonoBehaviour
     {
         var move = HandleInput();
 
-        // Keep the momentum when start moving
+        // // Keep the momentum when start moving
         if (move.sqrMagnitude > 0.01f)
         {
             _currentDirection = move;
@@ -47,7 +47,7 @@ public class PlayerController : MonoBehaviour
     {
         if(!_isMoving)
             return;
-
+        
         Vector3 finalMove = moveSpeed * Time.deltaTime * _currentDirection;
         _rb.MovePosition(transform.position + finalMove);
     }
