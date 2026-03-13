@@ -24,11 +24,11 @@ public class PlayerController : MonoBehaviour
     private int exp = 0;
     private int requireExp;
     private float currentSpeed;
-    private Rigidbody _rb;
+    private Rigidbody rb;
 
     void Awake()
     {
-        _rb = GetComponent<Rigidbody>();
+        rb = GetComponent<Rigidbody>();
         requireExp = baseExp;
         currentSpeed = baseMoveSpeed;
     }
@@ -58,8 +58,14 @@ public class PlayerController : MonoBehaviour
             return;
 
         var move = HandleInput();
+
+        if (move.sqrMagnitude > 0.01f)
+        {
+            GameManager.Instance.StartTheGame();
+        }
+
         Vector3 finalMove = currentSpeed * Time.deltaTime * move;
-        _rb.MovePosition(transform.position + finalMove);
+        rb.MovePosition(transform.position + finalMove);
     }
 
     public void GainExp(int amount)

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 [Serializable]
 public class ConsumableGroup
@@ -16,6 +15,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
     public static bool GameOver { get; private set; }
+    public static bool GameStart { get; private set; }
 
     [SerializeField] private float gameTime = 30f;
 
@@ -37,6 +37,13 @@ public class GameManager : MonoBehaviour
         Instance = this;
     }
 
+    void OnDisable()
+    {
+        Instance = null;
+        GameOver = false;
+        GameStart = false;
+    }
+
     void Start()
     {
         SetupConsumables();
@@ -46,6 +53,9 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         if (GameOver) 
+            return;
+
+        if (!GameStart)
             return;
 
         gameTime -= Time.deltaTime;
@@ -59,6 +69,8 @@ public class GameManager : MonoBehaviour
 
         UpdateTimerUI();
     }
+
+    public void StartTheGame() => GameStart = true;
 
     public void UpdateExpLvUI()
     {

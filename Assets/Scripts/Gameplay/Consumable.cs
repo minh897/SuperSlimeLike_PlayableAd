@@ -4,12 +4,11 @@ public class Consumable : MonoBehaviour
 {
     [SerializeField] private int level = 1;
 
-    private int _expValue;
-    private float _expMultiplier;
+    private int expValue;
 
     void Start()
     {
-        _expValue = level * (level + 1) / 2;
+        expValue = level * (level + 1) / 2;
     }
 
     public bool CanBeEaten(int playerLevel)
@@ -19,12 +18,13 @@ public class Consumable : MonoBehaviour
 
     public void GetConsumedBy(PlayerController player)
     {
-        player.GainExp(_expValue);
+        player.GainExp(expValue);
         gameObject.SetActive(false);
     }
 
     public void SetLevel(int levelToSet, float expMultiplier)
     {
         level = levelToSet;
+        expValue = (int)(expValue * expMultiplier);
     }
 }
