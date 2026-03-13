@@ -11,10 +11,6 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody _rb;
 
-    private Vector3 _currentDirection;
-
-    private bool _isMoving;
-
     void Awake()
     {
         _rb = GetComponent<Rigidbody>();
@@ -30,25 +26,10 @@ public class PlayerController : MonoBehaviour
         moveAction.action.Disable();
     }
 
-    void Update()
-    {
-        var move = HandleInput();
-
-        // // Keep the momentum when start moving
-        if (move.sqrMagnitude > 0.01f)
-        {
-            _currentDirection = move;
-            if (!_isMoving) 
-                _isMoving = true;
-        }
-    }
-
     void FixedUpdate()
     {
-        if(!_isMoving)
-            return;
-        
-        Vector3 finalMove = moveSpeed * Time.deltaTime * _currentDirection;
+        var move = HandleInput();
+        Vector3 finalMove = moveSpeed * Time.deltaTime * move;
         _rb.MovePosition(transform.position + finalMove);
     }
 

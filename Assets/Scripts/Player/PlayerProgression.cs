@@ -2,14 +2,17 @@ using UnityEngine;
 
 public class PlayerProgression : MonoBehaviour
 {
-    public int level = 1;
-    public float growthPerLevel = 0.3f;
+    [SerializeField] private int level = 1;
+    [SerializeField] private float growthMultiplier = 0.15f;
 
     public void LevelUp()
     {
         level++;
-        transform.localScale += Vector3.one * growthPerLevel;
+        float growthSize = Mathf.Sqrt(level * growthMultiplier);
+        transform.localScale += Vector3.one * growthSize;
     }
+
+    public int GetLevel() => level;
 
     void OnTriggerEnter(Collider other)
     {

@@ -2,15 +2,10 @@ using UnityEngine;
 
 public class Consumable : MonoBehaviour
 {
-    public int level = 1;
-    public int expValue = 1;
-    public float scaleSize = 0.5f;
+    [SerializeField] private int level = 1;
+    [SerializeField] private int expValue = 1;
 
-    void Start()
-    {
-        // Scalling food by its level
-        transform.localScale = level * scaleSize * Vector3.one;
-    }
+    public int ExpValue => level * (level + 1) / 2;
 
     public bool CanEat(int playerLevel)
     {
@@ -19,7 +14,12 @@ public class Consumable : MonoBehaviour
 
     public void GetConsume()
     {
-        GameManager.Instance.AddExp(expValue);
-        Destroy(gameObject);
+        GameManager.Instance.AddExp(ExpValue);
+        gameObject.SetActive(false);
+    }
+
+    public void SetLevel(int levelToSet)
+    {
+        level = levelToSet;
     }
 }
