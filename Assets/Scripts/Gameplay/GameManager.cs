@@ -1,25 +1,30 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
-[System.Serializable]
+[Serializable]
 public class ConsumableGroup
 {
     public int level;
+    public float expMultiplier;
     public List<GameObject> parentObjects;
 }
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
+    public static bool GameOver { get; private set; }
 
-    public TextMeshProUGUI levelText;
-    public TextMeshProUGUI expText;
-    
-    public int exp = 0;
-    public int expToLevel = 5;
+    [SerializeField] private float gameTime = 30f;
 
-    [SerializeField] private PlayerProgression player;
+    [SerializeField] private TextMeshProUGUI levelText;
+    [SerializeField] private TextMeshProUGUI expText;
+    [SerializeField] private TextMeshProUGUI timerText;
+    [SerializeField] private GameObject downloadCTA;
+
+    [SerializeField] private PlayerController player;
     [SerializeField] private List<ConsumableGroup> groups;
 
     void Awake()
@@ -34,26 +39,41 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        levelText.text = "" + player.GetLevel();
-        expText.text = exp + "/" + expToLevel;
         SetupConsumables();
+        UpdateExpLvUI();
     }
 
-    public void AddExp(int amount)
+    void Update()
     {
-        exp += amount;
-        if (exp >= expToLevel)
+        if (GameOver) 
+            return;
+
+        gameTime -= Time.deltaTime;
+
+        if (gameTime <= 0)
         {
-            player.LevelUp();
-            
-            exp = 0;
-            levelText.text = "" + player.GetLevel();
+            GameOver = true;
+            gameTime = 0;
+            downloadCTA.SetActive(true);
         }
-        expText.text = exp + "/" + expToLevel;
+
+        UpdateTimerUI();
     }
 
-    [ContextMenu("Setup Consumables")]
-    public void SetupConsumables()
+    public void UpdateExpLvUI()
+    {
+        levelText.text = "" + player.Level;
+        expText.text = player.Exp + " / " + player.RequireExp;
+    }
+
+    private void UpdateTimerUI()
+    {
+        int seconds = Mathf.FloorToInt(gameTime % 60);
+        int milliseconds = Mathf.FloorToInt(gameTime * 100 % 100);
+        timerText.text = string.Format("{0:00}.{1:00}", seconds, milliseconds);
+    }
+
+    private void SetupConsumables()
     {
         if (groups.Count == 0) return;
 
@@ -77,7 +97,7 @@ public class GameManager : MonoBehaviour
                         consumable = obj.AddComponent<Consumable>();
 
                     // Assign level
-                    consumable.SetLevel(group.level);
+                    consumable.SetLevel(group.level, group.expMultiplier);
                 }
             }
         }
