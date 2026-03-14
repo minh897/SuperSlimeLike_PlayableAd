@@ -59,10 +59,8 @@ public class PlayerController : MonoBehaviour
 
         var move = HandleInput();
 
-        if (move.sqrMagnitude > 0.01f)
-        {
+        if (move.sqrMagnitude > 0.01f && !GameManager.GameStart)
             GameManager.Instance.StartTheGame();
-        }
 
         Vector3 finalMove = currentSpeed * Time.deltaTime * move;
         rb.MovePosition(transform.position + finalMove);
