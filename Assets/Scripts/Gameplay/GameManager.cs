@@ -100,20 +100,18 @@ public class GameManager : MonoBehaviour
                     GameObject obj = child.gameObject;
 
                     // Add BoxCollider if missing
-                    if (!obj.TryGetComponent<BoxCollider>(out var col))
+                    if (!obj.TryGetComponent<Consumable>(out _))
                         obj.AddComponent<BoxCollider>();
 
                     // Add Consumable script
-                    Consumable consumable = obj.GetComponent<Consumable>();
-                    if (consumable == null)
-                        consumable = obj.AddComponent<Consumable>();
-
-                    // Assign level
-                    consumable.SetLevel(group.level, group.expMultiplier);
+                    if (!obj.TryGetComponent<Consumable>(out _))
+                    {
+                        Consumable consumable = obj.AddComponent<Consumable>();
+                        consumable.Init(group.level, group.expMultiplier);
+                    }
                 }
             }
         }
-
         Debug.Log("Consumables setup completed.");
     }
 }

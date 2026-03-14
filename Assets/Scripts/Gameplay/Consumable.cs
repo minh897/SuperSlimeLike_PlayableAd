@@ -2,13 +2,13 @@ using UnityEngine;
 
 public class Consumable : MonoBehaviour
 {
-    [SerializeField] private int level = 1;
+    private int level;
+    private float expValue = 1;
 
-    private int expValue;
-
-    void Start()
+    public void Init(int levelToSet, float expMultiplier)
     {
-        expValue = level * (level + 1) / 2;
+        level = levelToSet;
+        expValue = level * (level + 1) / 2 * expMultiplier;
     }
 
     public bool CanBeEaten(int playerLevel)
@@ -20,11 +20,5 @@ public class Consumable : MonoBehaviour
     {
         player.GainExp(expValue);
         gameObject.SetActive(false);
-    }
-
-    public void SetLevel(int levelToSet, float expMultiplier)
-    {
-        level = levelToSet;
-        expValue = (int)(expValue * expMultiplier);
     }
 }
