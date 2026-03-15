@@ -3,12 +3,12 @@ using UnityEngine;
 public class Consumable : MonoBehaviour
 {
     private int level;
-    private int expValue;
+    private float expValue = 1;
 
     public void Init(int levelToSet, float expMultiplier)
     {
         level = levelToSet;
-        expValue = (int)(expValue * expMultiplier);
+        expValue = level * (level + 1) / 2 * expMultiplier;
     }
 
     public bool CanBeEaten(int playerLevel)

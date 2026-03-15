@@ -66,9 +66,9 @@ public class PlayerController : MonoBehaviour
         rb.MovePosition(transform.position + finalMove);
     }
 
-    public void GainExp(int amount)
+    public void GainExp(float amount)
     {
-        exp += amount;
+        exp += (int)amount;
         if (exp >= requireExp)
         {
             LevelUp();
